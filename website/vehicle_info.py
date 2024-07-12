@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, session, jsonify, redirect, url_for, flash
 from datetime import datetime
-from . import Vehicle, Renting
+from . import Vehicle, Renting, db
 from flask_login import current_user
 from calendar import monthrange
 import threading
@@ -220,3 +220,31 @@ def redirect_rental():
         return redirect(
             url_for('renting_page.rent_vehicle', start_date=redir_start_date, end_date=redir_end_date,
                     vehicle_id=vehicle_id, total_value=redir_value))
+
+
+@vehicle_information.route('/remove-vehicle/<int:vehicle_id>', methods=['POST'])
+def remove_vehicle(vehicle_id):
+    """
+    Removes a vehicle from the database. Only accessible to admins.
+    :param vehicle_id:
+    """
+    if not current_user.is_authenticated or current_user.user_type != 'admin':
+        flash("You do not have permission to perform this action.", "error")
+        return redirect(url_for('vehicle_list.vehicles'))
+
+    vehicle = Vehicle.query.get(vehicle_id)
+
+    if not vehicle:
+        flash("Vehicle not found", "error")
+        return redirect(url_for('vehicle_list.vehicles'))
+
+    try:
+        # Delete the vehicle
+        db.session.delete(vehicle)
+        db.session.commit()
+        flash("Vehicle removed successfully", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"An error occurred while trying to remove the vehicle: {e}", "error")
+
+    return redirect(url_for('vehicle_list.vehicles'))

@@ -5,11 +5,12 @@ from werkzeug.utils import secure_filename
 import os
 import uuid
 from datetime import datetime
+from PIL import Image
 
 add_vehicle_page = Blueprint('add_vehicle_page', __name__)
 
 UPLOAD_FOLDER = r'website\static\car_images'
-ALLOWED_EXTENSIONS = {'png'}
+ALLOWED_EXTENSIONS = {'png', 'jpeg', 'jpg'}
 
 
 def allowed_file(filename):
@@ -19,6 +20,19 @@ def allowed_file(filename):
     :return:
     """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def resize_image(image_path, max_width, max_height):
+    """
+    Resize the image to the specified dimensions.
+    :param image_path:
+    :param max_width:
+    :param max_height:
+    :return:
+    """
+    with Image.open(image_path) as img:
+        img.thumbnail((max_width, max_height))
+        img.save(image_path)
 
 
 @add_vehicle_page.route('/add_vehicle', methods=['GET', 'POST'])
@@ -84,8 +98,11 @@ def add_vehicle():
                 filename = filename + "_" + str(uuid.uuid4()) + ".png"
                 image_path = os.path.join(UPLOAD_FOLDER, filename)
                 image_file.save(os.path.join(os.getcwd(), image_path))
+
+                # Resize image
+                resize_image(image_path, 667, 374)
             else:
-                flash('Please upload a png file.', 'error')
+                flash('Please upload a png, jpg, or jpeg file.', 'error')
                 return redirect(url_for('add_vehicle_page.add_vehicle'))
 
             new_vehicle = Vehicle(

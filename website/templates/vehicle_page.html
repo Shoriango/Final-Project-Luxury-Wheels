@@ -16,7 +16,7 @@
                     <h2 class="bold-text">Specifications:</h2>
                     <br>
                     <p class="small-text">Mileage:</p>
-                    <p class="bold-text">{{ vehicle.mileage }}Km</p>
+                    <p class="bold-text">{{ vehicle.mileage }} KM</p>
                     <p class="small-text">Horsepwoer:</p>
                     <p class="bold-text">{{ vehicle.horsepower}}</p>
                     <p class="small-text">Capacity:</p>
@@ -33,6 +33,15 @@
                     <p class="bold-text">{{ vehicle.condition }}</p>
                     <p class="small-text">Number of Doors:</p>
                     <p class="bold-text">{{ vehicle.num_doors }}</p>
+                    {% if current_user.is_authenticated and current_user.user_type == 'admin' %}
+                    <div class="remove-vehicle">
+                        <form action="{{ url_for('vehicle_information.remove_vehicle', vehicle_id=vehicle.id) }}"
+                              method="post"
+                              onsubmit="return confirm('Are you sure you want to remove this vehicle?');">
+                            <button type="submit" class="remove-button">Remove Vehicle</button>
+                        </form>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="vehicle-order">

@@ -93,6 +93,15 @@ def add_vehicle():
                 flash('Number of doors must be between 1 and 7.', 'error')
                 return redirect(url_for('add_vehicle_page.add_vehicle'))
 
+            for vehicle in Vehicle.query.all():
+                if vehicle.vin == vin:
+                    flash('VIN already exists.', 'error')
+                    return redirect(url_for('add_vehicle_page.add_vehicle'))
+
+                if vehicle.license_plate == license_plate:
+                    flash('License plate already exists.', 'error')
+                    return redirect(url_for('add_vehicle_page.add_vehicle'))
+
             if image_file and allowed_file(image_file.filename):
                 filename = secure_filename(f"{model}_{brand}")
                 filename = filename + "_" + str(uuid.uuid4()) + ".png"

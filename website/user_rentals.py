@@ -30,6 +30,7 @@ def cancel_rental(rental_id):
     :param rental_id:
 
     """
+    # Check if user has permission to cancel rental
     rental = Renting.query.get_or_404(rental_id)
     if rental.user_id != current_user.id:
         flash('You do not have permission to cancel this rental.', 'danger')
@@ -49,6 +50,7 @@ def remove_cancelled_rentals():
     """
     cancelled_rentals = Renting.query.filter_by(user_id=current_user.id, is_active=False).all()
 
+    # Check if user has permission to cancel rental and if any rentals are cancelled
     if not cancelled_rentals:
         flash('No cancelled rentals to remove.', 'info')
         return redirect(url_for('rentals_page.rentals'))

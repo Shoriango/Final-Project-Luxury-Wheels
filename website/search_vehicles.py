@@ -21,6 +21,8 @@ def vehicles():
     condition = request.form.get('condition', '')
 
     search_conditions = []
+
+    # Add search conditions based on user input values
     if search_query:
         search_conditions.append(
             or_(Vehicle.brand.ilike(f'%{search_query}%'),
@@ -44,6 +46,7 @@ def vehicles():
         else:
             search_conditions.append(Vehicle.condition.ilike(f'%{condition}%'))
 
+    # Retrieve vehicles based on search conditions
     vehicles_list = Vehicle.query.filter(*search_conditions).all()
 
     return render_template("vehicle_list.html", user=current_user,

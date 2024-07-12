@@ -89,7 +89,7 @@ def add_payment_method():
     Adds a new payment method for the current user
     """
     payment_method = request.form.get('newPaymentMethod')
-
+    # Check if the payment method is valid by checking if it's a valid card number
     if payment_method == 'Credit Card':
         card_number = request.form.get('cardNumber')
         if not card_number.isdigit() or len(card_number) != 16:
@@ -116,7 +116,7 @@ def add_payment_method():
             card_last_four=card_last_four,
             card_hash=card_hash
         )
-
+    # Check if the payment method is valid by checking if it's a valid email address
     elif payment_method == 'PayPal':
         paypal_email = request.form.get('paypalEmail')
         if paypal_email == '':

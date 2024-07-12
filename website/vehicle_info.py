@@ -63,6 +63,8 @@ def vehicle_page(vehicle_id):
     Shows already rented periods.
     :param vehicle_id:
     """
+
+    # Check if user is logged in and if vehicle exists
     global rented_periods, vehicle_value
     vehicle = Vehicle.query.get(vehicle_id)
 
@@ -99,7 +101,7 @@ def change_date():
     """
     new_month = int(request.form['selected_month'])
     new_year = int(request.form['selected_year'])
-
+    # Update session variables to keep track of the selected month and year
     if 'current_year' not in session:
         session['current_year'] = current_year
     if 'current_month' not in session:
@@ -133,12 +135,16 @@ def day_click():
     """
     Changes the date of the start and end date when a day is clicked.
     """
+
+    # Check if user is logged in and if vehicle exists
     global rental_start_date, rental_end_date, total_value
     day = int(request.form['day'])
     month = int(request.form['month'])
     year = int(request.form['year'])
     inserted_date = datetime(year, month, day)
     error = ""
+
+    # Update start and end date depending on the clicked day value
     if rental_start_date.year == 1:
         rental_start_date = datetime(year, month, day)
     elif rental_start_date > inserted_date:
@@ -186,6 +192,8 @@ def reset_dates():
     """
     Resets the dates of the start and end date when the reset button is clicked.
     """
+
+    # Reset start and end date when reset button is clicked
     global rental_start_date, rental_end_date, total_value
     rental_start_date = datetime(1, 1, 1)
     rental_end_date = datetime(1, 1, 1)
@@ -204,12 +212,14 @@ def redirect_rental():
     global rental_start_date, rental_end_date, total_value
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
-
+    # Check if user is logged in and if vehicle exists
     redir_start_date = rental_start_date
     redir_end_date = rental_end_date
     redir_value = total_value
 
     vehicle_id = request.form.get('vehicle_id')
+
+    # Redirect to rent vehicle page when submit button is clicked
     if rental_start_date.year == 1 or rental_end_date.year == 1:
         flash('Start date and end date must be filled', category='error')
         return redirect(url_for('vehicle_information.vehicle_page', vehicle_id=vehicle_id))
@@ -228,6 +238,8 @@ def remove_vehicle(vehicle_id):
     Removes a vehicle from the database. Only accessible to admins.
     :param vehicle_id:
     """
+
+    # Check if user is logged in and if user is admin
     if not current_user.is_authenticated or current_user.user_type != 'admin':
         flash("You do not have permission to perform this action.", "error")
         return redirect(url_for('vehicle_list.vehicles'))
@@ -237,7 +249,6 @@ def remove_vehicle(vehicle_id):
     if not vehicle:
         flash("Vehicle not found", "error")
         return redirect(url_for('vehicle_list.vehicles'))
-
     try:
         # Delete the vehicle
         db.session.delete(vehicle)

@@ -17,7 +17,6 @@ def allowed_file(filename):
     """
     Check if file extension is allowed
     :param filename:
-    :return:
     """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -28,7 +27,6 @@ def resize_image(image_path, max_width, max_height):
     :param image_path:
     :param max_width:
     :param max_height:
-    :return:
     """
     with Image.open(image_path) as img:
         img.thumbnail((max_width, max_height))
@@ -45,6 +43,7 @@ def cleanup_unused_images():
         image = str(image[0])
         last_slash = image.rfind('\\')
         all_images.append(image[last_slash + 1:])
+        # Remove images not used in the database
     for filename in os.listdir(UPLOAD_FOLDER):
         if filename not in all_images:
             os.remove(os.path.join(UPLOAD_FOLDER, filename))
@@ -65,6 +64,7 @@ def add_vehicle():
 
     if request.method == 'POST':
         try:
+            # Get user input values from the form fields and convert them to the appropriate data types
             brand = request.form['brand']
             model = request.form['model']
             category = request.form['category']
@@ -87,6 +87,7 @@ def add_vehicle():
             horsepower = int(request.form['horsepower'])
             image_file = request.files['image_file']
 
+            # Validate user input values for each field
             if not (1980 <= year <= datetime.now().year):
                 flash('Year must be between 1980 and current year.', 'error')
                 return redirect(url_for('add_vehicle_page.add_vehicle'))
@@ -129,9 +130,11 @@ def add_vehicle():
                 # Resize image
                 resize_image(image_path, 667, 374)
             else:
+                # Check if a file was uploaded and if it's an allowed file type
                 flash('Please upload a png, jpg, or jpeg file.', 'error')
                 return redirect(url_for('add_vehicle_page.add_vehicle'))
 
+            # Add vehicle to database
             new_vehicle = Vehicle(
                 brand=brand,
                 model=model,

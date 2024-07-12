@@ -46,7 +46,6 @@ def cleanup_unused_images():
         last_slash = image.rfind('\\')
         all_images.append(image[last_slash + 1:])
     for filename in os.listdir(UPLOAD_FOLDER):
-        print(filename)
         if filename not in all_images:
             os.remove(os.path.join(UPLOAD_FOLDER, filename))
 
@@ -108,8 +107,8 @@ def add_vehicle():
                 flash('Mileage must be between 1 and 1,000,000.', 'error')
                 return redirect(url_for('add_vehicle_page.add_vehicle'))
 
-            if not (1 <= num_doors <= 7):
-                flash('Number of doors must be between 1 and 7.', 'error')
+            if not (0 <= num_doors <= 7):
+                flash('Number of doors must be between 0 and 7.', 'error')
                 return redirect(url_for('add_vehicle_page.add_vehicle'))
 
             for vehicle in Vehicle.query.all():

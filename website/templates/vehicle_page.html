@@ -31,8 +31,10 @@
                     <p class="bold-text">{{ vehicle.color }}</p>
                     <p class="small-text">Condition:</p>
                     <p class="bold-text">{{ vehicle.condition }}</p>
+                    {% if vehicle.num_doors != 0 %}
                     <p class="small-text">Number of Doors:</p>
                     <p class="bold-text">{{ vehicle.num_doors }}</p>
+                    {% endif %}
                     {% if current_user.is_authenticated and current_user.user_type == 'admin' %}
                     <div class="remove-vehicle">
                         <form action="{{ url_for('vehicle_information.remove_vehicle', vehicle_id=vehicle.id) }}"

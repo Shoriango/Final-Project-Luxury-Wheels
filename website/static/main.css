@@ -9,7 +9,7 @@ body{
 
 .title{
     margin-top:50px;
-    color: #000000; /* White text color */
+    color: #000000;
 }
 
 .labels{
@@ -25,7 +25,7 @@ body{
 }
 
 .logo img {
-    height: 120px; /* Adjust the height as needed */
+    height: 120px;
     margin-left:15px;
 }
 
@@ -187,10 +187,10 @@ body{
 }
 
 .btn-veiculo img {
-    width: 200px; /* Set the desired width */
-    height: 200px; /* Set the desired height */
-    object-fit: contain; /* Maintain aspect ratio */
-    margin-top: 20px; /* Adjust margin to position image vertically */
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin-top: 20px;
 }
 
 .btn-veiculo:hover {
@@ -246,52 +246,52 @@ body{
 
 
 .btn-list-veiculo:hover {
-    transform: scale(1.05); /* Enlarge the button slightly */
+    transform: scale(1.05);
 }
 
 .list-button-text {
-    bottom: 10px; /* Position text at the bottom */
-    width: 100%; /* Ensure text takes full width */
-    line-height: normal; /* Reset line height */
-    color: #000000; /* Ensure text color is consistent */
+    bottom: 10px;
+    width: 100%;
+    line-height: normal;
+    color: #000000;
 }
 
 .button-text {
-    bottom: -10px; /* Position text at the bottom */
-    width: 100%; /* Ensure text takes full width */
-    line-height: normal; /* Reset line height */
-    color: #000000; /* Ensure text color is consistent */
+    bottom: -10px;
+    width: 100%;
+    line-height: normal;
+    color: #000000;
 
 }
 
 .form-group {
-    width: 80%; /* Adjust the width as needed */
-    margin: auto; /* Center the form group horizontally */
+    width: 80%;
+    margin: auto;
 }
 
 .discount-message {
-    color: green; /* Color of the discount message */
+    color: green;
     font-weight: bold;
-    margin-top: 10px; /* Adjust margin as per your design */
+    margin-top: 10px;
 }
 
 
 .btn {
-    display: block; /* Make the button a block element */
-    margin: 0 auto; /* Center the button horizontally */
+    display: block;
+    margin: 0 auto;
 }
 
 form button.btn-primary {
-    background: linear-gradient(45deg, #555555, #333333) !important; /* Gradient from darker to deeper teal */
-    color: #ffffff !important; /* White text color */
-    border-color: #333333 !important; /* Matching border color */
+    background: linear-gradient(45deg, #555555, #333333) !important;
+    color: #ffffff !important;
+    border-color: #333333 !important;
 }
 
 /* Hover effect */
 form button.btn-primary:hover {
-    background: linear-gradient(45deg, #666666, #444444); !important; /* Darker teal gradient on hover */
-    border-color: #444444 !important; /* Matching border color on hover */
-    transform: scale(1.02); /* Slight increase in size */
+    background: linear-gradient(45deg, #666666, #444444); !important;
+    border-color: #444444 !important;
+    transform: scale(1.02);
 }
 
 .container {
@@ -304,13 +304,13 @@ form button.btn-primary:hover {
 .bar3 {
     width: 45px;
     height: 4px;
-    background-color: #000000; /* White color for bars */
+    background-color: #000000;
     transition: 0.4s;
     margin: 3px;
 }
 
 .change .bar1 {
-    transform: rotate(-45deg) translate(-8px, 6px); /* Adjusted translation */
+    transform: rotate(-45deg) translate(-8px, 6px);
 }
 
 .change .bar2 {
@@ -323,7 +323,7 @@ form button.btn-primary:hover {
 
 .dropdown {
     display: flex;
-    justify-content: flex-end; /* Align items to the right */
+    justify-content: flex-end;
     position:relative;
     float:right;
     margin-right: 20px;
@@ -333,31 +333,31 @@ form button.btn-primary:hover {
 .menu {
     display: none;
     position: absolute;
-    top: calc(100% + 5px); /* Add some spacing between the button and the menu */
+    top: calc(100% + 5px);
     right: 0;
-    background-color: #ffffff; /* White background color */
+    background-color: #ffffff;
     border: 2px solid #ccc;
-    border-radius: 8px; /* Increase border radius for a softer look */
+    border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     overflow: hidden;
-    width: 150px; /* Set a fixed width for the menu */
+    width: 150px;
     margin-top:10px;
 }
 
 .menuItems {
-    padding: 8px 16px; /* Add padding to the menu items */
+    padding: 8px 16px;
     cursor: pointer;
     text-align: left;
     color: #333;
     white-space: nowrap;
     overflow: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Add transition for hover effects */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .menuItems:hover {
     background-color: #f0f0f0;
-    color: #333; /* Adjust text color on hover */
+    color: #333;
 }
 
 .show {
@@ -404,7 +404,7 @@ form button.btn-primary:hover {
 
 /* Filter Styles */
 .filter {
-    position: relative; /* Ensure relative positioning */
+    position: relative;
 }
 
 .filter label {
@@ -424,14 +424,14 @@ form button.btn-primary:hover {
 
 .range-value {
     position: absolute;
-    top: 0; /* Adjust the top position */
+    top: 0;
     right: 0;
-    padding-right:50px;/* Adjust the right position */
+    padding-right:50px;
     color: #555;
 }
 .range-value::after {
-    content: "€"; /* Euro symbol */
-    margin-right: 5px; /* Add spacing between Euro symbol and range value */
+    content: "€";
+    margin-right: 5px;
 }
 
 .vehicle-btn-reset{
@@ -557,9 +557,9 @@ form button.btn-primary:hover {
 /*Calendar start*/
 
 .calendar-container {
-    position: relative; /* Positioning for absolute positioning of month text */
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 columns for each day of the week */
+    grid-template-columns: repeat(7, 1fr);
     gap: 5px;
     width: fit-content;
     margin: auto;
@@ -567,7 +567,7 @@ form button.btn-primary:hover {
     padding: 10px;
     text-align: center;
     background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Styling for day buttons */
@@ -580,7 +580,7 @@ form button.btn-primary:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.3s ease; /* Smooth transition */
+    transition: background-color 0.3s ease;
 }
 
 .day-button {
@@ -598,22 +598,22 @@ form button.btn-primary:hover {
 }
 
 .rented-day {
-    background-color: #f28b82; /* Softer red background for rented days */
-    color: white; /* White text for rented days */
-    border: 2px solid #f28b82; /* Border to match background */
-    cursor: not-allowed; /* Indicate that the date is not clickable */
-    pointer-events: none; /* Make it unclickable */
+    background-color: #f28b82;
+    color: white;
+    border: 2px solid #f28b82;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Hover effect for day buttons */
 .day-button:hover {
-    background-color: #e0e0e0; /* Light grey background on hover */
+    background-color: #e0e0e0;
 }
 
 /* Highlight current day */
 .current-day {
-    background-color: #ffc107; /* Yellow background for the current day */
-    color: #fff; /* White text color for better contrast */
+    background-color: #ffc107;
+    color: #fff;
 }
 
 .calendar-wrapper {
@@ -636,7 +636,7 @@ form button.btn-primary:hover {
 .date-box {
     padding: 20px;
     text-align: center;
-    background-color: transparent; /* Make the background transparent */
+    background-color: transparent;
 }
 
 .date-box p {
@@ -644,7 +644,7 @@ form button.btn-primary:hover {
     font-size: 15px;
     font-weight: bold;
     display: flex;
-    flex-direction: column; /* Stack label and date text vertically */
+    flex-direction: column;
     align-items: center;
     min-width: 120px;
     min-height: 55px;
@@ -652,13 +652,13 @@ form button.btn-primary:hover {
 
 #startDate, #endDate {
     font-weight: normal;
-    margin-top: 10px; /* Add some space between the label and date text */
+    margin-top: 10px;
 }
 
 /* Centering the dropdowns */
 .dropdown-container {
     text-align: center;
-    margin-bottom: 10px; /* Add space between dropdowns and calendar */
+    margin-bottom: 10px;
 
 }
 
@@ -713,7 +713,7 @@ form button.btn-primary:hover {
 }
 .submit-button-container {
     text-align: center;
-    margin-top: 20px; /* Adjust margin as needed */
+    margin-top: 20px;
 }
 
 .submit-button-container button {
@@ -863,7 +863,7 @@ margin-right: 70px;
 }
 
 .vehicle-list-image img:hover {
-    transform: scale(1.1); /* Increase scale on hover */
+    transform: scale(1.1);
 }
 
 .vehicle-list-text {
@@ -876,7 +876,7 @@ margin-right: 70px;
     width: 100%;
     padding: 20px;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .vehicle-list-text h1 {
@@ -892,12 +892,12 @@ margin-right: 70px;
 .bottom-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px; /* Add some space between top and bottom buttons */
+    margin-top: 20px;
 }
 
 .bottom-button {
     position: relative;
-    width: 49%; /* Adjust as needed to make the two buttons fit in a single row */
+    width: 49%;
     text-align: center;
     overflow: hidden;
 }
@@ -909,7 +909,7 @@ margin-right: 70px;
 }
 
 .bottom-button img:hover {
-    transform: scale(1.1); /* Increase scale on hover */
+    transform: scale(1.1);
 }
 
 .button-text-overlay {
@@ -918,16 +918,16 @@ margin-right: 70px;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    color: white; /* Make text color white */
+    color: white;
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .button-text {
     font-size: 1.5em;
-    color: white; /* Ensure the text inside the span is also white */
+    color: white;
 }
 
 .cars-button-text{

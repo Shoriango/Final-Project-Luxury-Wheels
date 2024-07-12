@@ -35,6 +35,22 @@ def resize_image(image_path, max_width, max_height):
         img.save(image_path)
 
 
+def cleanup_unused_images():
+    """
+    Cleanup images not used in the database.
+    """
+    vehicle_images = Vehicle.query.with_entities(Vehicle.image_path).all()
+    all_images = []
+    for image in vehicle_images:
+        image = str(image[0])
+        last_slash = image.rfind('\\')
+        all_images.append(image[last_slash + 1:])
+    for filename in os.listdir(UPLOAD_FOLDER):
+        print(filename)
+        if filename not in all_images:
+            os.remove(os.path.join(UPLOAD_FOLDER, filename))
+
+
 @add_vehicle_page.route('/add_vehicle', methods=['GET', 'POST'])
 @login_required
 def add_vehicle():
@@ -42,6 +58,9 @@ def add_vehicle():
     Add a new vehicle to the database and redirect to the vehicle list.
     Only admins can access this page.
     """
+    if request.method == 'GET':
+        cleanup_unused_images()
+        return render_template('add_vehicle.html', user=current_user)
     if current_user.user_type != 'admin':
         return redirect(url_for('vehicle_list.vehicles'))
 
@@ -140,6 +159,9 @@ def add_vehicle():
 
             db.session.add(new_vehicle)
             db.session.commit()
+
+            # Cleanup unused images after successfully adding a new vehicle
+            cleanup_unused_images()
 
             flash('Vehicle added successfully.', 'success')
             return redirect(url_for('vehicle_list.vehicles'))

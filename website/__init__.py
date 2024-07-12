@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 basedir = path.abspath(path.dirname(__file__))
 
-# Configuration for the databae
+# Configuration for the database
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     'sqlite:///' + path.join(basedir, 'databases/website.db')
 

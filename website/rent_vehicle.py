@@ -114,7 +114,7 @@ def add_payment_method():
             status='Active',
             user_id=current_user.id,
             card_last_four=card_last_four,
-            card_hash=card_hash  # Store the hash of the card number
+            card_hash=card_hash
         )
 
     elif payment_method == 'PayPal':

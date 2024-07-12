@@ -32,7 +32,6 @@ def add_vehicle():
         return redirect(url_for('vehicle_list.vehicles'))
 
     if request.method == 'POST':
-        # Validate fields
         try:
             brand = request.form['brand']
             model = request.form['model']
@@ -89,7 +88,6 @@ def add_vehicle():
                 flash('Please upload a png file.', 'error')
                 return redirect(url_for('add_vehicle_page.add_vehicle'))
 
-            # Create and save new vehicle instance
             new_vehicle = Vehicle(
                 brand=brand,
                 model=model,

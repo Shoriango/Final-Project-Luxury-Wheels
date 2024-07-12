@@ -202,9 +202,7 @@ def redirect_rental():
 
     """
     global rental_start_date, rental_end_date, total_value
-    # Check if the user is logged in
     if not current_user.is_authenticated:
-        # Redirect to login page or any other page for authentication
         return redirect(url_for('auth.login'))
 
     redir_start_date = rental_start_date

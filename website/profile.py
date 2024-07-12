@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import User, Payment, db  # Ensure models are imported from the correct location
-from datetime import datetime
+from . import Payment, db
 import hashlib
 
 profile_page = Blueprint('profile_page', __name__)

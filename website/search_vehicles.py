@@ -39,7 +39,10 @@ def vehicles():
     if fuel_type:
         search_conditions.append(Vehicle.fuel_type.ilike(f'%{fuel_type}%'))
     if condition:
-        search_conditions.append(Vehicle.condition.ilike(f'%{condition}%'))
+        if condition.lower() == 'new':
+            search_conditions.append(Vehicle.condition.ilike('New'))
+        else:
+            search_conditions.append(Vehicle.condition.ilike(f'%{condition}%'))
 
     vehicles_list = Vehicle.query.filter(*search_conditions).all()
 

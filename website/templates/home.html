@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<div class="main-page">
+    <div class="vehicle-list-image">
+        <a href="{{ url_for('vehicle_list.vehicles') }}">
+            <img src="/static/images/vehicle_list.jpg" alt="Vehicle List" class="image-button">
+            <div class="vehicle-list-text">
+                <h1>Explore Our Vehicles</h1>
+                <p>Find the perfect car for your needs.</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="bottom-buttons">
+        {% if user.is_authenticated %}
+        <div class="bottom-button">
+            <a href="{{ url_for('rentals_page.rentals') }}">
+                <img src="/static/images/rentals.jpg" alt="User Rentals" class="image-button">
+                <div class="button-text-overlay">
+                    <span class="button-text">My Rentals</span>
+                </div>
+            </a>
+        </div>
+        <div class="bottom-button">
+            <a href="{{ url_for('profile_page.profile') }}">
+                <img src="/static/images/profile.jpg" alt="Profile" class="image-button">
+                <div class="button-text-overlay">
+                    <span class="button-text">Profile</span>
+                </div>
+            </a>
+        </div>
+        {% else %}
+        <div class="bottom-button">
+            <a href="{{ url_for('auth.sign_up') }}">
+                <img src="/static/images/register.jpg" alt="Register" class="image-button">
+                <div class="button-text-overlay">
+                    <span class="button-text">Register</span>
+                </div>
+            </a>
+        </div>
+        <div class="bottom-button">
+            <a href="{{ url_for('auth.login') }}">
+                <img src="/static/images/log_in.jpg" alt="Login" class="image-button">
+                <div class="button-text-overlay">
+                    <span class="button-text">Login</span>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

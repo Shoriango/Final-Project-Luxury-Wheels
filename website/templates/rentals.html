@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}My Rentals{% endblock %}
+
+{% block content %}
+<div class="rentals-container">
+    <h1 class="text-center rentals-header">My Rentals</h1>
+
+    {% if rentals %}
+    <div class="rentals-list mt-4">
+        {% for rental_info in rentals %}
+        <div class="rental-item">
+            <div class="rental-details">
+                <h5>{{ rental_info.vehicle.brand }} {{ rental_info.vehicle.model }} ({{ rental_info.vehicle.year
+                    }})</h5>
+                <p>Rental Period: {{ rental_info.rental.start_date.strftime('%B %d, %Y') }} to {{
+                    rental_info.rental.end_date.strftime('%B %d, %Y') }}</p>
+                <p>Total Cost: {{ rental_info.rental.total_cost }} €</p>
+            </div>
+            {% if rental_info.rental.is_active %}
+            <form action="{{ url_for('rentals_page.cancel_rental', rental_id=rental_info.rental.id) }}" method="POST">
+                <button type="submit" class="btn btn-danger">Cancel Rental</button>
+            </form>
+            {% else %}
+            <p class="text-danger">Cancelled</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <form action="{{ url_for('rentals_page.remove_cancelled_rentals') }}" method="POST">
+        <button type="submit" class="btn btn-danger mt-4">Remove Cancelled Rentals</button>
+    </form>
+    {% else %}
+    <p class="text-center no-rentals">You have no rentals.</p>
+    {% endif %}
+</div>
+{% endblock %}

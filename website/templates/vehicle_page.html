@@ -1,0 +1,221 @@
+{% extends "base.html" %} {% block title %} {{vehicle.brand}} {{vehicle.model}} {{vehicle.year}} {% endblock %}
+{%block content%}
+<div class="vehicle-box">
+    <div class="vehicle-image">
+        <img src="{{ vehicle.image_path }}" alt="{{ vehicle.brand }} {{ vehicle.model }} {{ vehicle.year }}"
+             class="centered-image">
+    </div>
+    <div class="vehicle-info">
+        <div class="vehicle-title">
+            <h1>{{vehicle.brand}} {{vehicle.model}} {{vehicle.year}}</h1>
+        </div>
+        <div class="vehicle-details">
+            <div class="vehicle-grid">
+                <div class="vehicle-column">
+                    <br>
+                    <h2 class="bold-text">Specifications:</h2>
+                    <br>
+                    <p class="small-text">Mileage:</p>
+                    <p class="bold-text">{{ vehicle.mileage }}Km</p>
+                    <p class="small-text">Horsepwoer:</p>
+                    <p class="bold-text">{{ vehicle.horsepower}}</p>
+                    <p class="small-text">Capacity:</p>
+                    <p class="bold-text">{{ vehicle.capacity }}</p>
+                    <p class="small-text">Transmission:</p>
+                    <p class="bold-text">{{ vehicle.transmission }}</p>
+                    <!-- horsepower TOD
+                    <p class="small-text">Daily Value:</p>
+                    <p class="bold-text">{{ vehicle.daily_value }} €</p> -->
+                </div>
+                <div class="vehicle-column">
+                    <p class="small-text" style="margin-top: 96px;">Fuel Type:</p>
+                    <p class="bold-text">{{ vehicle.fuel_type }}</p>
+                    <p class="small-text">Color:</p>
+                    <p class="bold-text">{{ vehicle.color }}</p>
+                    <p class="small-text">Condition:</p>
+                    <p class="bold-text">{{ vehicle.condition }}</p>
+                    <p class="small-text">Number of Doors:</p>
+                    <p class="bold-text">{{ vehicle.num_doors }}</p>
+                </div>
+            </div>
+            <div class="vehicle-order">
+                <h2>Order This Car</h2>
+                <p class="daily-text">Daily Value:</p>
+                <p class="bold-text" style="font-size: 30px;, ">{{ vehicle.daily_value }} €</p>
+                <div id="selectedDates">
+                    <div class="date-box">
+                        <p>Start Date: <span id="startDate">{%if rental_start_date.year != 1%}{{rental_start_date.day}} {{ months[rental_start_date.month] }}, {{rental_start_date.year}}{%else%}{%endif%}</span>
+                        </p>
+                    </div>
+                    <div class="date-box">
+                        <p>End Date: <span id="endDate">{%if rental_end_date.year != 1%}{{rental_end_date.day}} {{ months[rental_end_date.month] }}, {{rental_end_date.year}}{%else%}{%endif%}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="reset-button-container">
+                    <button onclick="resetDates()">Reset Dates</button>
+                </div>
+                <div class="submit-button-container">
+                    <form action="/submit-rental-dates" method="post">
+                        <input type="hidden" name="start_date" value="{{ rental_start_date}}">
+                        <input type="hidden" name="end_date" value="{{ rental_end_date }}">
+                        <input type="hidden" name="vehicle_id" value="{{ vehicle.id }}">
+                        <input type="hidden" name="total_value" value="{{ total_value }}">
+                        <button type="submit">Rent now</button>
+                    </form>
+                </div>
+                <p class="total-price" style="font-weight: bold;">Total Price:
+                    <span id="totalValue"></span></p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="dropdown-container">
+                <select id="monthSelect" onchange="updateDate()">
+                    {% for key, value in months.items() %}
+                    <option value="{{ key }}" {% if key== current_month %} selected {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <select id="yearSelect" onchange="updateDate()">
+                    {% for key, value in years.items() %}
+                    <option value="{{ key }}" {% if key== current_year %} selected {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="calendar-wrapper">
+            <div id="daysContainer" class="calendar-container">
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        renderDays({{ days_month }}, {{ current_month }}, {{ current_year }}, {{ rented_periods|tojson }});
+                    });
+                </script>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    // Function to update the date when the month or year dropdowns are changed
+    function updateDate() {
+    const selectedMonth = document.getElementById("monthSelect").value;
+    const selectedYear = parseInt(document.getElementById("yearSelect").value);
+
+    fetch('/change-date', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `selected_month=${selectedMonth}&selected_year=${selectedYear}`
+    }).then(response => response.json())
+      .then(data => {
+          // Update the months dropdown
+          const monthSelect = document.getElementById("monthSelect");
+          monthSelect.innerHTML = ''; // Clear existing options
+          for (const [key, value] of Object.entries(data.months)) {
+              const option = document.createElement("option");
+              option.value = key;
+              option.text = value;
+              monthSelect.add(option);
+          }
+          monthSelect.value = selectedMonth;
+
+          // Update the days
+          renderDays(data.days_month, selectedMonth, selectedYear, data.rented_periods);
+
+          // Update the current_year variable if the selected year is the current year
+          if (selectedYear === new Date().getFullYear()) {
+              current_year = selectedYear;
+              const currentMonth = new Date().getMonth() + 1;
+              if (selectedMonth < currentMonth) {
+                  monthSelect.value = currentMonth;
+                  renderDays(data.days_month, currentMonth, selectedYear, data.rented_periods);
+              }
+          }
+      })
+}
+
+    // Function to render the calendar
+    function renderDays(daysInMonth, selectedMonth, selectedYear, rentedPeriods) {
+        const daysContainer = document.getElementById("daysContainer");
+        daysContainer.innerHTML = '';
+        const today = new Date();
+        const rentedDates = [];
+
+        rentedPeriods.forEach(period => {
+            const start = new Date(period[0]);
+            const end = new Date(period[1]);
+            for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+                rentedDates.push(new Date(d));
+            }
+        });
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            let dayElement;
+            const selectedDate = new Date(selectedYear, selectedMonth - 1, day);
+            if (selectedDate < today) {
+                dayElement = document.createElement("span");
+                dayElement.className = "day past-day";
+            } else if (rentedDates.some(date => date.getTime() === selectedDate.getTime())) {
+                dayElement = document.createElement("span");
+                dayElement.className = "day rented-day";
+            } else {
+                dayElement = document.createElement("button");
+                dayElement.className = "day day-button";
+                dayElement.setAttribute('onclick', `dayButtonClick(${day}, ${selectedMonth}, ${selectedYear})`);
+            }
+            dayElement.innerText = day;
+            daysContainer.appendChild(dayElement);
+        }
+    }
+
+    // Function to handle day button click
+    function dayButtonClick(day, month, year) {
+        fetch('/day-click', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `day=${day}&month=${month}&year=${year}`
+        }).then(response => response.json())
+          .then(data => {
+              if (data.start_date_year == 1) {
+                  document.getElementById('startDate').innerText = "";
+              }else{
+                document.getElementById('startDate').innerText = `${data.start_date_day} ${data.start_date_month} ${data.start_date_year}`;
+              }
+              if (data.end_date_year != 1){
+              document.getElementById('endDate').innerText = `${data.end_date_day} ${data.end_date_month} ${data.end_date_year}`;
+              }else{
+              document.getElementById('endDate').innerText = "";
+              }
+              if (data.total_value > 0){
+                document.getElementById('totalValue').innerText = `${data.total_value}€`;
+              } else {
+                  document.getElementById('totalValue').innerText = "";
+              }
+              if (data.error != ""){
+              alert(data.error);
+              }
+          });
+    }
+    // Function to reset dates
+    function resetDates() {
+        fetch('/reset-dates', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => response.json())
+          .then(data => {
+              document.getElementById('startDate').innerText = "";
+              document.getElementById('endDate').innerText = "";
+              document.getElementById('totalValue').innerText = "";
+
+          });
+    }
+</script>
+
+{% endblock %}

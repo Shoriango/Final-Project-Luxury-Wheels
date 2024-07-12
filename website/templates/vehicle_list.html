@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block title %} Vehicles {% endblock %}
+{% block content %}
+
+<h1 align="center">Vehicles</h1>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2 align="center">Filters</h2>
+    <form id="filter-form" method="POST" action="{{ url_for('vehicle_list.vehicles') }}">
+        <input type="hidden" name="search-input" id="search-input-hidden" value="{{ search_query }}">
+        <div class="filter-box">
+            <div class="filter">
+                <label for="price-range">Max Price:</label>
+                <div class="range-value">{{ current_value or 2000 }}</div>
+                <input type="range" id="price-range" name="price-range" min="0" max="2000" value="{{ current_value or 2000 }}">
+            </div>
+        </div>
+        <div class="filter-box">
+            <div class="filter">
+                <label>Number of Doors:</label>
+                <div class="radio-options">
+                    <label>
+                        <input type="radio" name="num-doors" value="2" {% if selected_doors and '2' in selected_doors %} checked{% endif %} onchange="updateForm()">
+                        2 Doors
+                    </label>
+                    <label>
+                        <input type="radio" name="num-doors" value="4" {% if selected_doors and '4' in selected_doors %} checked{% endif %} onchange="updateForm()">
+                        4 Doors
+                    </label>
+                    <label>
+                        <input type="radio" name="num-doors" value="5" {% if selected_doors and '5' in selected_doors %} checked{% endif %} onchange="updateForm()">
+                        5 Doors
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="filter-box">
+            <div class="filter">
+                <label>Vehicle Type:</label>
+                <div class="radio-options">
+                      <label>
+                        <input type="radio" name="vehicle-type" value="Sedan" {% if selected_vehicle_type and 'Sedan' in selected_vehicle_type %} checked{% endif %} onchange="updateForm()">
+                        Sedan
+                      </label>
+                      <label>
+                        <input type="radio" name="vehicle-type" value="SUV" {% if selected_vehicle_type and 'SUV' in selected_vehicle_type %} checked{% endif %} onchange="updateForm()">
+                        SUV
+                      </label>
+                      <label>
+                        <input type="radio" name="vehicle-type" value="Truck" {% if selected_vehicle_type and 'Truck' in selected_vehicle_type %} checked{% endif %} onchange="updateForm()">
+                        Truck
+                      </label>
+                      <label>
+                        <input type="radio" name="vehicle-type" value="Van" {% if selected_vehicle_type and 'Van' in selected_vehicle_type %} checked{% endif %} onchange="updateForm()">
+                        Van
+                      </label>
+                        <label>
+                            <input type="radio" name="vehicle-type" value="Motorcycle" {% if selected_vehicle_type and 'Motorcycle' in selected_vehicle_type %} checked{% endif %} onchange="updateForm()">
+                            Motorcycle
+                        </label>
+
+                      <label>
+                        <input type="radio" name="vehicle-type" value="Premium" {% if selected_vehicle_type and 'Premium' in selected_vehicle_type %} checked{% endif %} onchange="updateForm()">
+                        Premium
+                      </label>
+
+                </div>
+            </div>
+        </div>
+        <div class="filter-box">
+            <div class="filter">
+                <label>Transmission:</label>
+                <div class="radio-options">
+                  <label>
+                    <input type="radio" name="transmission" value="Automatic" {% if selected_transmission and 'Automatic' in selected_transmission %} checked{% endif %} onchange="updateForm()">
+                    Automatic
+                  </label>
+                  <label>
+                    <input type="radio" name="transmission" value="Manual" {% if selected_transmission and 'Manual' in selected_transmission %} checked{% endif %} onchange="updateForm()">
+                    Manual
+                  </label>
+                </div>
+            </div>
+        </div>
+        <div class="filter-box">
+            <div class="filter">
+                <label>Fuel Type:</label>
+                <select name="fuel-type" onchange="updateForm()">
+                    <option value="">All</option>
+                    <option value="Gas" {% if selected_fuel_type and 'Gas' in selected_fuel_type %} selected{% endif %}>Gas</option>
+                    <option value="Diesel" {% if selected_fuel_type and 'Diesel' in selected_fuel_type %} selected{% endif %}>Diesel</option>
+                    <option value="Electric" {% if selected_fuel_type and 'Electric' in selected_fuel_type %} selected{% endif %}>Electric</option>
+                    <option value="Hybrid" {% if selected_fuel_type and 'Hybrid' in selected_fuel_type %} selected{% endif %}>Hybrid</option>
+                </select>
+            </div>
+        </div>
+        <div class="filter-box">
+            <div class="filter">
+                <label>Condition:</label>
+                <select name="condition" onchange="updateForm()">
+                    <option value="">All</option>
+                    <option value="New" {% if selected_condition and 'New' in selected_condition %} selected{% endif %}>New</option>
+                    <option value="Like New" {% if selected_condition and 'Like New' in selected_condition %} selected{% endif %}>Like New</option>
+                    <option value="Good" {% if selected_condition and 'Good' in selected_condition %} selected{% endif %}>Good</option>
+                    <option value="Fair" {% if selected_condition and 'Fair' in selected_condition %} selected{% endif %}>Fair</option>
+                </select>
+            </div>
+        </div>
+        <div class="filter-box">
+            <button class="vehicle-btn-reset" type="button" onclick="resetForm()">Reset Filters</button>
+        </div>
+    </form>
+</div>
+
+<div class="vehicle-list">
+    {% for vehicle in vehicles %}
+    <div class="btn-list-veiculo">
+        <a href="{{ url_for('vehicle_information.vehicle_page', vehicle_id=vehicle.id) }}">
+            <img src="{{ vehicle.image_path }}" alt="{{ vehicle.brand }} {{ vehicle.model }} {{ vehicle.year }}">
+            <div class="list-button-text">{{ vehicle.brand }} {{ vehicle.model }} {{ vehicle.year }}</div>
+            <div class="list-button-price">{{ vehicle.daily_value }} €</div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    // Get references to the form and range input
+    const priceRange = document.getElementById('price-range');
+    const rangeValue = document.querySelector('.range-value');
+
+    // Initial setup to display current value
+    rangeValue.textContent = priceRange.value;
+
+    // Update range value dynamically as the slider is moved
+    priceRange.addEventListener('input', function() {
+        rangeValue.textContent = priceRange.value;
+        updateForm(); // Trigger form update on slider input
+    });
+
+    // Function to update the form and apply filters
+    function updateForm() {
+        const form = document.getElementById('filter-form');
+        const formData = new FormData(form);
+        const searchParams = new URLSearchParams(formData);
+
+        fetch(form.action, {
+            method: form.method,
+            body: searchParams,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => response.text())
+          .then(data => {
+              const parser = new DOMParser();
+              const newDocument = parser.parseFromString(data, 'text/html');
+              const newVehicleList = newDocument.querySelector('.vehicle-list');
+              const currentVehicleList = document.querySelector('.vehicle-list');
+
+              // Replace only the vehicle list
+              currentVehicleList.innerHTML = newVehicleList.innerHTML;
+
+              // Update history state
+              window.history.pushState({}, '', form.action + '?' + searchParams.toString());
+          });
+    }
+
+    // Function to reset filters
+    function resetForm() {
+        const form = document.getElementById('filter-form');
+        form.reset();
+
+        // Reset the price range value display
+        priceRange.value = 2000;
+        rangeValue.textContent = priceRange.value;
+
+        // Reset the hidden search input
+        document.getElementById('search-input-hidden').value = '';
+
+        updateForm();
+    }
+</script>
+
+{% endblock %}

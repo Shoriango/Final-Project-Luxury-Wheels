@@ -1,0 +1,55 @@
+{% extends "base.html" %} {% block title %} Register {% endblock %}
+
+{%block content%}
+
+
+<form method="POST">
+    <h3 class="title" align="center">Register</h3>
+    <div class="form-group">
+        <label class="labels" for="email">Email Address</label>
+        <input type="email" class="form-control" id="email" name="email"
+               placeholder="Enter email">
+    </div>
+    <div class="form-group">
+        <label class="labels" for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" name="firstName"
+               placeholder="Enter first name">
+    </div>
+    <div class="form-group">
+        <label class="labels" for="password1">Password</label>
+        <input type="password" class="form-control" id="password1"
+               name="password1"
+               placeholder="Enter password">
+    </div>
+    <div class="form-group">
+        <label class="labels" for="password2">Password (Confirm)</label>
+        <input type="password" class="form-control" id="password2"
+               name="password2"
+               placeholder="Confirm password">
+    </div>
+    <div class="form-group">
+        <label class="labels" for="phone">Phone number (Non-Portuguese numbers,
+            please insert calling code) </label>
+        <input type="tel" class="form-control" id="phone"
+               name="phone"
+               placeholder="Insert phone number">
+    </div>
+
+    <div class="form-group">
+        <label class="labels" for="user_type">Type of client:</label>
+        <select class="form-control" id="user_type" name="user_type"
+                required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="personal">Personal</option>
+            <option value="business">Business</option>
+        </select>
+    </div>
+
+
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Register Account</button>
+    </div>
+</form>
+
+{% endblock %}

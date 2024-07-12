@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Profile</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div>
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('profile_page.profile') }}">
+        <input type="hidden" name="update_profile">
+        <div class="form-group">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ user.first_name }}"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" id="phone_number" name="phone_number" class="form-control"
+                   value="{{ user.phone_number }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary profile-button">Update Profile</button>
+    </form>
+
+    <br>
+    <br>
+    <h2>Change Password</h2>
+    <form method="POST" action="{{ url_for('profile_page.profile') }}">
+        <input type="hidden" name="change_password">
+        <div class="form-group">
+            <label for="current_password">Current Password:</label>
+            <input type="password" id="current_password" name="current_password" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm New Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary profile-button">Change Password</button>
+    </form>
+    <br>
+    <br>
+    <h2>Payment Methods</h2>
+    <form action="{{ url_for('profile_page.add_payment_method') }}" method="POST">
+        <div class="form-group">
+            <label for="newPaymentMethod">Payment Method</label>
+            <select id="newPaymentMethod" name="newPaymentMethod" class="form-control" onchange="togglePaymentInput()">
+                <option value="Credit Card">Credit Card</option>
+                <option value="PayPal">PayPal</option>
+            </select>
+        </div>
+        <div class="form-group" id="cardInput">
+            <label for="cardNumber">Card Number</label>
+            <input type="text" id="cardNumber" name="cardNumber" class="form-control" pattern="\d{16}"
+                   title="Please enter a valid 16-digit card number">
+        </div>
+        <div class="form-group" id="emailInput" style="display: none;">
+            <label for="paypalEmail">PayPal Email</label>
+            <input type="email" id="paypalEmail" name="paypalEmail" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary profile-button">Add Payment Method</button>
+    </form>
+
+    <br>
+    <br>
+    <ul class="list-group mt-3">
+        {% for payment in payment_methods %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ payment.method }} -
+            {% if payment.method == 'PayPal' %}
+            {{ payment.email }}
+            {% else %}
+            **** **** **** {{ payment.card_last_four }}
+            {% endif %}
+            <form action="{{ url_for('profile_page.delete_payment_method', payment_id=payment.id) }}" method="POST"
+                  style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    function togglePaymentInput() {
+        // Get the selected payment method
+        var paymentMethod = document.getElementById('newPaymentMethod').value;
+        var cardInput = document.getElementById('cardInput');
+        var emailInput = document.getElementById('emailInput');
+
+        // Hide/show the appropriate input fields
+        if (paymentMethod === 'Credit Card') {
+            cardInput.style.display = 'block';
+            emailInput.style.display = 'none';
+            document.getElementById('cardNumber').required = true;
+            document.getElementById('paypalEmail').required = false;
+        } else if (paymentMethod === 'PayPal') {
+            cardInput.style.display = 'none';
+            emailInput.style.display = 'block';
+            document.getElementById('cardNumber').required = false;
+            document.getElementById('paypalEmail').required = true;
+        }
+    }
+    // Call the togglePaymentInput function when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        togglePaymentInput();
+    });
+</script>
+
+{% endblock %}
